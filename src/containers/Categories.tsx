@@ -1,40 +1,41 @@
-import {FlatList, Image, View} from 'react-native';
-import {Text} from '../components/ui';
-import {normalize} from '../utils/size';
+import { FlatList, Image, View } from "react-native";
+import { Text } from "../components/ui";
+import { normalize } from "../utils/size";
 
 export default function Categories() {
   const data = [
     {
-      text: 'Cat 1',
+      text: "Cat 1",
     },
     {
-      text: 'Cat 2',
+      text: "Cat 2",
     },
     {
-      text: 'Cat 3',
+      text: "Cat 3",
     },
     {
-      text: 'Cat 4',
+      text: "Cat 4",
     },
     {
-      text: 'Cat 5',
+      text: "Cat 5",
     },
     {
-      text: 'Cat 6',
+      text: "Cat 6",
     },
     {
-      text: 'Cat 7',
+      text: "Cat 7",
     },
   ];
-  const catItem = ({item}: any) => (
+  const catItem = ({ item }: any) => (
     <View
       style={{
-        flexDirection: 'column',
-        alignItems: 'center',
+        flexDirection: "column",
+        alignItems: "center",
         height: normalize(100),
-      }}>
+      }}
+    >
       <Image
-        source={{uri: 'https://picsum.photos/100'}}
+        source={{ uri: "https://picsum.photos/100" }}
         style={{
           width: normalize(50),
           height: normalize(50),
@@ -49,7 +50,7 @@ export default function Categories() {
     <FlatList
       data={data}
       horizontal
-      keyExtractor={item => item.text}
+      keyExtractor={(item) => item.text}
       showsHorizontalScrollIndicator={false}
       renderItem={catItem}
     />
