@@ -4,6 +4,7 @@ import {ProductType} from '../types';
 
 function useProducts() {
   const [filter, setFilter] = useState<number>(4);
+  const [search, setSearch] = useState<string>('');
   const [plist, setPlist] = useState<ProductType[]>([]);
   const getData = async () => {
     try {
@@ -13,18 +14,23 @@ function useProducts() {
       console.error('Error fetching products:', e);
     }
   };
-  const filterProducts = useMemo(() => {
-    if (filter === -1) {
-      return plist;
+  const filteredProducts = useMemo(() => {
+    let result = plist;
+    if (filter !== -1) {
+      result = result.filter(item => item.rating >= filter);
     }
-    return plist.filter(item => item.rating >= filter);
-  }, [plist, filter]);
+    if (search.trim() !== '') {
+      result = result.filter(item =>
+        item.productName.toLowerCase().includes(search.trim().toLowerCase())
+      );
+    }
+    return result;
+  }, [plist, filter, search]);
 
-  // mounting, updating, and unmounting
   useEffect(() => {
     getData();
   }, []);
 
-  return {plist, filterProducts};
+  return {plist, filteredProducts, setSearch, setFilter};
 }
 export default useProducts;
