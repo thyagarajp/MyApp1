@@ -1,0 +1,228 @@
+npx @react-native-community/cli@latest init MyApp
+
+React native cli
+expo
+
+mobile => ios/android => swift/kotlin => react native bridge => js
+=> expo
+
+JSI : javascript interface
+JSI bridge : react native bridge
+
+react => js => (code gen) jsi => device
+
+jsi will generate the types specific to the platform
+fabric : react
+turbo modules : everything is lazy loaded
+
+react native cli
+npx @react-native-community/cli@latest init MyApp
+cd MyApp
+cd ios
+npx pod install
+npm run ios
+
+Component
+
+1. StatusBar : customize the status bar look & feel
+2. SafeAreaView (ios) : notch area
+3. KeyboardAvoidingView : keyboard will not cover the input field
+
+Components
+
+- smallest reusable entity
+
+src
+types.ts
+components
+Product.tsx
+utils
+size.ts
+
+SMART-DUMB Component
+
+Components
+
+- smallest reusable entity
+- single responsibility principle
+
+Page 1
+Product : add to cart
+Page 2
+Product : add to cart & navigate
+Page 3
+Product : add to cart/waitlist
+
+Product
+
+- display the data
+
+- fetching the data
+- add to cart
+- navigation
+- waitlist
+
+SMART : logical
+DUMB : presentation
+
+App
+ProductList
+Product
+ProductPrice
+ATOMIC Designing
+
+atoms => molecules => organisms => templates => pages
+
+ProductList
+Product
+Image
+ProductPrice
+Text
+
+components
+product
+molecules
+organisms
+templates
+containers
+ProductList.tsx
+
+    A : 1      A : 1
+    B : 2      D : 4
+    C : 3      Beta : 2
+               C : 3
+
+FlatList : virtual scrolling
+
+src
+services
+ProductService.ts
+
+Components
+props : data exchange
+state : ui updates
+
+- state should always be initialized
+- state should always be immutable : shallow update - shallow update : state updates - deep update : immerjs
+
+obj={
+a:1,
+b:2,
+c:{
+d:3
+}
+}
+setState(product(obj))
+obj={a:1}
+setState({a:2})
+
+components : reusable ui elements
+hooks : reusable logic
+
+class : state, lifecycle, render
+function : no state, no lifecycle, render
+
+stateful
+stateless
+
+react hooks : 16.8 : plug & play
+custom hook
+
+Ui
+
+- layout : flexbox
+- responsiveness
+
+FAB's : floating action buttons
+
+absolute position considers the previous non static element to make the placements
+of the content
+
+plist
+rating : filtering
+sorting 
+
+Memoizations : reducing re-renders : use when working with large datasets
+- useMemo : data memoization
+- memo : components memoization 
+a component will re-render only when any of its props are changing
+
+Passing data between components
+- props : parent-child
+- redux : global state management
+- context api : v16
+
+Context
+- provider : one : data => simple, complex
+- consumer : multiple
+
+only the descendants of the provider can be a consumer
+
+App : provider
+    ThemeSwitch : data
+    ProductList
+        Product : used (consumer)
+
+
+props/state : local scope
+context : provider scope
+
+data persistence
+- encrypt : secure storage (file systems)
+- plain : async storage
+
+3rd party library
+cd ios && npx pod install && cd ..
+cd android && ./gradlew clean && ./gradlew build
+
+utils
+    storage.ts
+
+npm i react-native-safe-area-
+
+    cart : [],
+    theme : '',
+    user : {}
+
+<ThemeProvider>
+    <CartProvider>
+        <USerProvider>
+
+        </USerProvider>
+    </CartProvider>
+</ThemeProvider>
+
+App
+    Provider
+        Router
+
+react navigation
+npm install @react-navigation/native
+npm install react-native-screens react-native-safe-area-context
+
+stack
+drawer
+tabs
+
+npm install @react-navigation/native-stack
+
+src
+    screens
+        Products.tsx
+        ProductDetail.tsx
+    Routes.tsx
+
+    stack
+        Login
+        OTPVerify
+        HomeNavigator
+    
+    HomeNavigator : bottomtabs
+        home
+        search
+        alerts
+        historystack
+            transactions
+            transactiondetail
+            phonepesupport
+
