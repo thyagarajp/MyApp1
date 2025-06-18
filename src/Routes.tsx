@@ -3,6 +3,7 @@ import ProductDetail from './screens/ProductDetail';
 import Products from './screens/Products';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Settings from './screens/Settings';
+import Cart from './screens/Cart';
 
 const Tabs = createBottomTabNavigator();
 export default function AppNavigator() {
@@ -35,16 +36,16 @@ function ProductNavigator() {
       <Stack.Screen
         name="Products"
         component={Products}
-        options={{title: 'Product List1'}}
+        options={{title: 'Product List'}}
       />
       <Stack.Screen
         name="ProductDetail"
         component={ProductDetail}
         options={{title: 'Product Detail'}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="Cart"
-        component={ProductDetail}
+        component={Cart}
         options={{title: 'Cart'}}
       />
     </Stack.Navigator>

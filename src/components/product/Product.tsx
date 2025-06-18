@@ -2,16 +2,30 @@ import {Button, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ProductType} from '../../types';
 import {calculateHeight, normalize} from '../../utils/size';
 import {Rating, Spacer, Text} from '../ui';
-import {memo, useContext, useState} from 'react';
+import {memo, useContext, useLayoutEffect, useState} from 'react';
 import ProductPrice from './ProductPrice';
 import Wishlist from './Wishlist';
-import {ThemeContext} from '../../context';
+import {ThemeContext} from '../../context/theme';
+import {CartContext} from '../../context/cart';
 import {useNavigation} from '@react-navigation/native';
 type Props = {data: ProductType};
 function Product({data}: Props) {
   const [image, setImage] = useState<string>(data.productImage);
   const theme = useContext(ThemeContext);
-  const {navigate} = useNavigation();
+  const navigation = useNavigation<any>();
+  const {cart, addToCart, incrementCount, decrementCount} = useContext(CartContext);
+  // Add cart icon to headers
+  useLayoutEffect(() => {
+    if (typeof navigation?.setOptions === 'function') {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity onPress={() => navigation.navigate('Cart')} style={{marginRight: 16}}>
+            <Text style={{fontSize: 22}}>🛒 {cart.length}</Text>
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [cart, navigation]);
   // const user= useContext(UserContext);
   return (
     <View style={styles.container}>
@@ -19,7 +33,7 @@ function Product({data}: Props) {
       <Text>{theme}</Text>
       <TouchableOpacity
         style={styles.image}
-        onPress={() => navigate('ProductDetail', {data})}>
+        onPress={() => navigation.navigate('ProductDetail', {data})}>
         <Image
           source={{uri: image}}
           style={{width: '100%', height: '100%', borderRadius: 4}}
@@ -36,7 +50,41 @@ function Product({data}: Props) {
         salePrice={data.productSalePrice}
       />
       <Rating rating={data.rating} />
-      <Button title="Add to Cart" />
+      <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
+        {cart.find(i => i.productId === data.productId) ? (
+          <>
+            <TouchableOpacity
+              style={{padding: 8, backgroundColor: '#eee', borderRadius: 4, marginRight: 8}}
+              onPress={() => decrementCount(data.productId)}
+            >
+              <Text style={{fontSize: 18}}>-</Text>
+            </TouchableOpacity>
+            <Text style={{fontSize: 18, marginHorizontal: 8}}>
+              {cart.find(i => i.productId === data.productId)?.count}
+            </Text>
+            <TouchableOpacity
+              style={{padding: 8, backgroundColor: '#eee', borderRadius: 4, marginLeft: 8}}
+              onPress={() => incrementCount(data.productId)}
+            >
+              <Text style={{fontSize: 18}}>+</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <Button
+            title="Add to Cart"
+            onPress={() => addToCart({
+              productId: data.productId,
+              productName: data.productName,
+              productImage: data.productImage,
+              productStock: data.productStock,
+              productPrice: data.productPrice,
+              productSalePrice: data.productSalePrice,
+              rating: data.rating,
+              count: 1,
+            })}
+          />
+        )}
+      </View>
     </View>
   );
 }

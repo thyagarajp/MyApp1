@@ -7,6 +7,7 @@ import {ThemeProvider} from './src/context';
 import Storage from './src/utils/storage';
 import AppNavigator from './src/Routes';
 import {NavigationContainer} from '@react-navigation/native';
+import {CartProvider} from './src/context/cart';
 
 function App(): React.JSX.Element {
   const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
@@ -23,9 +24,11 @@ function App(): React.JSX.Element {
 
   return (
     <NavigationContainer>
-      <ThemeProvider value={theme}>
-        <AppNavigator />
-      </ThemeProvider>
+      <CartProvider>
+        <ThemeProvider value={theme}>
+          <AppNavigator />
+        </ThemeProvider>
+      </CartProvider>
     </NavigationContainer>
   );
 }
