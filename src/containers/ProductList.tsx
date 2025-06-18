@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FlatList, View } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import DropDownPicker from "react-native-dropdown-picker";
 import Product from "../components/product/Product";
 import useProducts from "../hooks/useProducts";
 import Categories from "./Categories";
@@ -9,6 +9,14 @@ import { Spacer } from "../components/ui";
 function ProductList({ search, filter }: { search: string; filter: number }) {
   const { filteredProducts, setSearch, setFilter, sortOrder, setSortOrder } =
     useProducts();
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(sortOrder);
+  const [items, setItems] = useState([
+    { label: "Sort by Price", value: "none" },
+    { label: "Low to High", value: "asc" },
+    { label: "High to Low", value: "desc" },
+  ]);
+
   // Update search term when prop changes
   React.useEffect(() => {
     setSearch(search);
@@ -16,32 +24,65 @@ function ProductList({ search, filter }: { search: string; filter: number }) {
   React.useEffect(() => {
     setFilter(filter);
   }, [filter, setFilter]);
+  React.useEffect(() => {
+    setSortOrder(value);
+  }, [value, setSortOrder]);
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Categories />
       <Spacer size={10} />
-      <Picker
-        selectedValue={sortOrder}
-        style={{
-          position: "absolute",
-          top: 20,
-          right: 20,
-          backgroundColor: "#fff",
-          borderRadius: 8,
-          elevation: 5, // for Android shadow
-          shadowColor: "#000", // for iOS shadow
-          shadowOpacity: 0.2,
-          shadowRadius: 4,
-          shadowOffset: { width: 0, height: 2 },
-          zIndex: 9999,
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        containerStyle={{
+          marginLeft: 16,
+          marginBottom: 10,
+          zIndex: 1000,
+          width: "60%",
+          alignSelf: "flex-start",
         }}
-        onValueChange={(value) => setSortOrder(value)}
-      >
-        <Picker.Item label="Sort by Price" value="none" />
-        <Picker.Item label="Low to High" value="asc" />
-        <Picker.Item label="High to Low" value="desc" />
-      </Picker>
+        style={{
+          borderRadius: 8,
+          borderColor: "#1976d2",
+          backgroundColor: "#f5faff",
+          minHeight: 44,
+          paddingHorizontal: 12,
+          width: "100%",
+        }}
+        dropDownContainerStyle={{
+          borderRadius: 8,
+          borderColor: "#1976d2",
+          backgroundColor: "#fff",
+          zIndex: 1000,
+          width: "100%",
+          alignSelf: "flex-start",
+        }}
+        textStyle={{
+          fontSize: 16,
+          color: "#1976d2",
+          fontWeight: "500",
+        }}
+        labelStyle={{
+          color: "#1976d2",
+        }}
+        selectedItemLabelStyle={{
+          fontWeight: "bold",
+          color: "#fff",
+        }}
+        selectedItemContainerStyle={{
+          backgroundColor: "#1976d2",
+        }}
+        listItemContainerStyle={{
+          borderBottomColor: "#e3e3e3",
+          borderBottomWidth: 1,
+        }}
+        placeholder="Sort by Price"
+      />
       <FlatList
         initialNumToRender={10}
         horizontal={false}
